@@ -1,5 +1,5 @@
 import express,{Request , Response} from 'express';
-import {body} from 'express-validator'
+import {body,validationResult} from 'express-validator'
 
 const router = express.Router();
 
@@ -12,7 +12,17 @@ router.post('/api/users/signup',[
         .isLength({ min:4 , max:20})
         .withMessage('Password must be within 4 or 20 characters')
 ],(req : Request,res : Response)=>{
+    const errors = validationResult(req)
 
+    if(!errors.isEmpty()){
+        return res.status(400).send(errors.array())
+    }
+
+    const {email,passwrod} = req.body;
+
+    console.log('Creating User....');
+    
+    res.send({})
 })
 
 export {router as signupRouter}
