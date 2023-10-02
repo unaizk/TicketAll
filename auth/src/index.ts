@@ -2,6 +2,7 @@ import express from 'express';
 import 'express-async-errors'
 import mongoose from "mongoose"
 import cookieSession from 'cookie-session';
+
 import { json } from 'body-parser';
 import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
@@ -32,6 +33,10 @@ app.all('*',async()=>{
 app.use(errorHandler)
 
 const start = async() =>{
+
+    if(!process.env.JWT_KEY){
+        throw new Error('JWT_KEY is invalid')
+    }
     try {
         await mongoose.connect('mongodb://mongo-srv:27017/auth')
         console.log('Connected to MongoDB');

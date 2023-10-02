@@ -43,12 +43,12 @@ router.post('/api/users/signup',[
    const userJwt = jwt.sign({
     id:user._id,
     email:user.email
-   },'unais')
+   },process.env.JWT_KEY!)
 
    //Store it on session object
 
    req.session = {
-    jwt:userJwt
+    jwt:userJwt  
    }
 
    res.status(201).send(user)
