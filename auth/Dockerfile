@@ -1,5 +1,5 @@
 # Command to configure the base image (official Node.js base image)
-FROM node:18-alpine
+FROM node:alpine
 
 # Set the working directory for the container
 WORKDIR /app
@@ -8,10 +8,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies inside the container
-RUN npm install
+RUN npm install --omit=dev
 
 # Copy all the files from the existing directory to the docker container
-COPY ./ ./
+COPY . .
 
 # Specify the default command to run the application inside the container
 CMD ["npm", "start"]
