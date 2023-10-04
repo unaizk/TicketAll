@@ -85,14 +85,6 @@ it('Email already exisiting error',async()=>{
 
 it('Set cookie after succesfull signup',async()=>{
    
-    const response = await request(app)
-        .post('/api/users/signup')
-        .send({
-            email:'unaisk@gmail.com',
-            password:"1234"
-        })
-
-        .expect(201);
-
-    expect(response.get("Set-Cookie")).toBeDefined()
+    const cookie = await global.signup() // In the setup.ts file, I've exported a signup() function globally.
+    expect(cookie).toBeDefined()
 })
