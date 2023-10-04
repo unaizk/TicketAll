@@ -9,6 +9,7 @@ beforeAll(async()=>{
    
     process.env.JWT_KEY = 'unais'
   
+    
     mongo = await MongoMemoryServer.create();
     const mongoUri = mongo.getUri();
 

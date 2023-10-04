@@ -81,3 +81,18 @@ it('Email already exisiting error',async()=>{
 
     .expect(400);
 })
+
+
+it('Set cookie after succesfull signup',async()=>{
+   
+    const response = await request(app)
+        .post('/api/users/signup')
+        .send({
+            email:'unaisk@gmail.com',
+            password:"1234"
+        })
+
+        .expect(201);
+
+    expect(response.get("Set-Cookie")).toBeDefined()
+})
