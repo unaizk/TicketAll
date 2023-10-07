@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-const useRequest = ({url,method,body}) => {
+const useRequest = ({url,method,body,onSuccess}) => {
 
     const [errors,setErrors] = useState({
         passwordErrors: [],
@@ -17,7 +17,11 @@ const useRequest = ({url,method,body}) => {
                 emailErrors: [],
                 otherErrors: []
             }); // Clear any previous errors
+
             const response = await axios[method](url,body)
+            if(onSuccess){
+                onSuccess(response.data)
+            }
             return response
         } catch (err) {
             const newErrors = {
