@@ -20,7 +20,7 @@ const Header = ({ currentUser }) => {
     console.log(links);
     return (
         <nav className='navbar navbar-dark bg-dark'>
-            <Link className="navbar-brand ml-4" href="/">
+            <Link className="navbar-brand" href="/">
                 TicketAll
             </Link> 
 
