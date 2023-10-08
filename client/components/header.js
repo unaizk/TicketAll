@@ -4,9 +4,9 @@ import Link from 'next/link'
 const Header = ({ currentUser }) => {
 
     const links = [
-        !currentUser && {label:'Sign Up',href:'/auth/signup'},
-        !currentUser && {label:'Sign In',href:'/auth/signin'},
-        currentUser && {label:'Sign Out',href:'/auth/signout'}
+        !currentUser && {label:<p style={{color:'white'}}>Sign Up</p>,href:'/auth/signup'},
+        !currentUser && {label:<p style={{color:'white'}}>Sign Ip</p>,href:'/auth/signin'},
+        currentUser && {label:<p style={{color:'white'}}>Sign Out</p>,href:'/auth/signout'}
     ].filter(linkConfig => linkConfig) // Filter out falsy values
 
     const renderedLinks = links.map(({label,href})=>(
@@ -20,7 +20,7 @@ const Header = ({ currentUser }) => {
     console.log(links);
     return (
         <nav className='navbar navbar-dark bg-dark'>
-            <Link className="navbar-brand" href="/">
+            <Link className="navbar-brand ml-4" href="/">
                 TicketAll
             </Link> 
 
