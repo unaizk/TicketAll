@@ -20,7 +20,7 @@ router.post('/api/tickets',requireAuth,[
 
     await tickets.save()
     
-    res.status(200).send(tickets)
+    res.status(201).send(tickets)
 })
 
 export {router as createTicketRouter}

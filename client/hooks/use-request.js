@@ -6,6 +6,8 @@ const useRequest = ({url,method,body,onSuccess}) => {
     const [errors,setErrors] = useState({
         passwordErrors: [],
         emailErrors: [],
+        titleError:[],
+        priceError:[],
         otherErrors: []
     })
 
@@ -27,6 +29,8 @@ const useRequest = ({url,method,body,onSuccess}) => {
             const newErrors = {
                 passwordErrors: err.response.data.errors.filter(err => err.field === 'password'),
                 emailErrors: err.response.data.errors.filter(err => err.field === 'email'),
+                titleErrors: err.response.data.errors.filter(err => err.field === 'title'),
+                priceErrors: err.response.data.errors.filter(err => err.field === 'price'),
                 otherErrors: err.response.data.errors.filter(err => !err.field) // Errors without a field
             };
             setErrors(newErrors);

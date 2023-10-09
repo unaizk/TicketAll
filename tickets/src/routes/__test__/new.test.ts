@@ -87,7 +87,7 @@ it('create a tickets with valid inputs',async()=>{
         .send({
             title,price
         })
-        .expect(200);
+        .expect(201);
 
       tickets = await  Ticket.find({})
 
