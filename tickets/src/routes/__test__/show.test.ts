@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 
 
 it('Return a 404 if the tickets is not found',async()=>{
-    const cookie = global.signin()//retrun a cookie string
+   
     const id = new mongoose.Types.ObjectId().toHexString() // It will generate a duplicate id for testing purpose
     await request(app)
         .get(`/api/tickets/${id}`)
