@@ -1,6 +1,6 @@
 import { Message } from "node-nats-streaming";
 import { Listener } from "./base-listener";
-import { TicketCreatedEvent } from "./ticker-create-event";
+import { TicketCreatedEvent } from "./ticket-create-event";
 import { Subjects } from "./subjects";
 
 
