@@ -3,7 +3,7 @@ import { Ticket } from '../models/ticket'
 import { body } from 'express-validator'
 import { requireAuth , validateRequest, NotFoundError, NotAuthorizedError  } from '@unaiztickets/common'
 import { TicketUpdatedPublisher } from '../events/publisher/ticket-updated-publisher'
-import { natsWrapper } from '../nats-swrapper'
+import { natsWrapper } from '../nats-wrapper'
 
 const router = express.Router()
 

@@ -4,7 +4,7 @@ import { body } from "express-validator";
 import { validateRequest } from "@unaiztickets/common";
 import { Ticket } from "../models/ticket";
 import { TicketCreatedPublisher } from "../events/publisher/ticket-created-publisher";
-import { natsWrapper } from "../nats-swrapper";
+import { natsWrapper } from "../nats-wrapper";
 
 
 const router = express.Router()
