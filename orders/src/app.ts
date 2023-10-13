@@ -5,7 +5,10 @@ import cors from 'cors';
 import { json } from 'body-parser';
 import { errorHandler,NotFoundError,currentUser } from '@unaiztickets/common';
 
-
+import { indexOrdersRouter } from './routes/index';
+import { showOrdersRouter } from './routes/show';
+import { newOrdersRouter } from './routes/new';
+import { deleteOrdersRouter } from './routes/delete';
 
 const app = express();
 app.set('trust proxy', true)
@@ -17,6 +20,10 @@ app.use(cookieSession({
 }))
 app.use(currentUser)
 
+app.use(indexOrdersRouter)
+app.use(showOrdersRouter)
+app.use(newOrdersRouter)
+app.use(deleteOrdersRouter)
 
 
 app.all('*',async()=>{
