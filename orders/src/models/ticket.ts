@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { Order } from "./orders";
+import { OrderStatus } from "@unaiztickets/common";
 
 
 //Interface describes the properties that are required to create Tickets
@@ -12,6 +14,7 @@ interface TicketAttrs{
 export interface TicketDocs extends mongoose.Document{
     title : string,
     price : number,
+    isReserved():Promise<boolean> //This functions return a Promise that is boolean
 }
 
 
@@ -44,6 +47,21 @@ const ticketSchema = new mongoose.Schema({
 
 ticketSchema.statics.build = (attrs:TicketAttrs)=>{
     return new Ticket(attrs)
+}
+
+ticketSchema.methods.isReserved = async function(){
+    //this === the ticket document that we just called isReserved()
+    const existingOrder = await Order.findOne({
+        ticket:this,
+        status:{
+            $in:[
+                OrderStatus.Created,
+                OrderStatus.Complete,
+                OrderStatus.AwaitingPayment
+            ]
+        }
+    });
+    return !!existingOrder // if there is existing order it will return true else false
 }
 
 const Ticket = mongoose.model<TicketDocs, TicketModel>('Ticket',ticketSchema)
