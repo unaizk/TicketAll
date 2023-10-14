@@ -8,6 +8,7 @@ const useRequest = ({url,method,body,onSuccess}) => {
         emailErrors: [],
         titleError:[],
         priceError:[],
+        orderError:[],
         otherErrors: []
     })
 
@@ -17,6 +18,9 @@ const useRequest = ({url,method,body,onSuccess}) => {
             setErrors({
                 passwordErrors: [],
                 emailErrors: [],
+                titleError:[],
+                priceError:[],
+                orderError:[],
                 otherErrors: []
             }); // Clear any previous errors
 
@@ -31,6 +35,7 @@ const useRequest = ({url,method,body,onSuccess}) => {
                 emailErrors: err.response.data.errors.filter(err => err.field === 'email'),
                 titleErrors: err.response.data.errors.filter(err => err.field === 'title'),
                 priceErrors: err.response.data.errors.filter(err => err.field === 'price'),
+                orderErrors: err.response.data.errors.filter(err => err.field === 'ticketId'),
                 otherErrors: err.response.data.errors.filter(err => !err.field) // Errors without a field
             };
             setErrors(newErrors);
