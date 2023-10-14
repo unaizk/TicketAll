@@ -4,6 +4,8 @@ import { body } from 'express-validator';
 import { requireAuth , validateRequest , NotFoundError, OrderStatus, BadRequestError } from '@unaiztickets/common';
 import { Order  } from '../models/orders';
 import { Ticket } from '../models/ticket';
+import { OrderCreatedPublisher } from '../events/publisher/order-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 
 const router = express.Router();
@@ -47,7 +49,18 @@ async(req : Request, res : Response)=>{
     })
 
     await order.save()
+
     //Publish an event saying that an order was created
+    await new OrderCreatedPublisher(natsWrapper.client).publish({
+        id : order.id,
+        userId : order.userId,
+        status : order.status,
+        expiresAt : order.expiresAt.toISOString(),
+        ticket : {
+            id: ticket.id,
+            price : ticket.price
+        }
+    })
 
      
     res.status(201).send(order)
