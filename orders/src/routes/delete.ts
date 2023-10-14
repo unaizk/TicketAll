@@ -11,6 +11,9 @@ router.delete('/api/orders/:orderId', requireAuth, async(req : Request, res : Re
 
     const order = await Order.findById(orderId)
 
+   
+    
+
     if(!order){
         throw new NotFoundError()
     }
@@ -19,6 +22,8 @@ router.delete('/api/orders/:orderId', requireAuth, async(req : Request, res : Re
     }
 
     order.status = OrderStatus.Cancelled
+    
+    await order.save();
 
     res.status(204).send(order)
 })
