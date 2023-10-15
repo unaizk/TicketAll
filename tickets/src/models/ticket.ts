@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 //Interface describes the properties that are required to create Tickets
 interface TicketAttrs{
@@ -13,7 +13,8 @@ interface TicketAttrs{
 interface TicketDocs extends mongoose.Document{
     title : string,
     price : number,
-    userId : string
+    userId : string,
+    version : number
 }
 
 
@@ -46,6 +47,10 @@ const ticketSchema = new mongoose.Schema({
         }
     }
 })
+
+ticketSchema.set('versionKey','version') // we are setting our vesrion key as default in mongoose document as __v so by this setting it will set as 'version'
+
+ticketSchema.plugin(updateIfCurrentPlugin) // added plugin 
 
 ticketSchema.statics.build = (attrs:TicketAttrs)=>{
     return new Ticket(attrs)
