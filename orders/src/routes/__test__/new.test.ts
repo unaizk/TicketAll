@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { Ticket } from '../../models/ticket';
 import { Order } from '../../models/orders';
 import { OrderStatus } from '@unaiztickets/common';
+import { natsWrapper } from '../../nats-wrapper';
 
 
 
@@ -57,4 +58,22 @@ it('Reserve a ticket',async()=>{
          ticketId : ticket.id
      })
      .expect(201)
+})
+
+it('Emits an order created event',async()=>{
+    const ticket = Ticket.build({
+        title:'COncert',
+        price:500
+    })
+     await ticket.save()
+
+     await request(app)
+     .post('/api/orders')
+     .set('Cookie',global.signin())
+     .send({
+         ticketId : ticket.id
+     })
+     .expect(201)
+
+     expect(natsWrapper.client.publish).toHaveBeenCalled()
 })
