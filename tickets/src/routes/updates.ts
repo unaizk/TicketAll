@@ -43,7 +43,8 @@ validateRequest,
         id:tickets.id,
         title:tickets.title,
         price:tickets.price,
-        userId:tickets.userId
+        userId:tickets.userId,
+        version : tickets.version
     })
 
     res.send(tickets)

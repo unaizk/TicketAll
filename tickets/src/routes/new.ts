@@ -22,12 +22,14 @@ router.post('/api/tickets', requireAuth, [
         })
     
         await ticket.save()
-    
+        console.log(ticket,'ticket now created');
+        
         await new TicketCreatedPublisher(natsWrapper.client).publish({
             id: ticket.id,
             title: ticket.title,
             price: ticket.price,
-            userId: ticket.userId
+            userId: ticket.userId,
+            version : ticket.version
         })
         console.log('ticket created');
         

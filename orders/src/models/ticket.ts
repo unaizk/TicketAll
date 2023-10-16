@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Order } from "./orders";
 import { OrderStatus } from "@unaiztickets/common";
-
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 //Interface describes the properties that are required to create Tickets
 interface TicketAttrs{
@@ -15,6 +15,7 @@ interface TicketAttrs{
 export interface TicketDocs extends mongoose.Document{
     title : string,
     price : number,
+    version:number,
     isReserved():Promise<boolean> //This functions return a Promise that is boolean
 }
 
@@ -45,6 +46,11 @@ const ticketSchema = new mongoose.Schema({
         }
     }
 })
+
+ticketSchema.set('versionKey','version') // This line sets the version key to 'version' in the Mongoose document. This version will automatically increase when a ticket is created or updated.
+
+ticketSchema.plugin(updateIfCurrentPlugin) //This line adds the 'updateIfCurrentPlugin' to the schema. This plugin helps with optimistic concurrency control, ensuring that updates are applied only if the version number matches.
+
 
 ticketSchema.statics.build = (attrs:TicketAttrs)=>{
     return new Ticket({

@@ -48,9 +48,9 @@ const ticketSchema = new mongoose.Schema({
     }
 })
 
-ticketSchema.set('versionKey','version') // we are setting our vesrion key as default in mongoose document as __v so by this setting it will set as 'version'
+ticketSchema.set('versionKey','version') // This line sets the version key to 'version' in the Mongoose document. This version will automatically increase when a ticket is created or updated.
 
-ticketSchema.plugin(updateIfCurrentPlugin) // added plugin 
+ticketSchema.plugin(updateIfCurrentPlugin) //This line adds the 'updateIfCurrentPlugin' to the schema. This plugin helps with optimistic concurrency control, ensuring that updates are applied only if the version number matches.
 
 ticketSchema.statics.build = (attrs:TicketAttrs)=>{
     return new Ticket(attrs)

@@ -1,6 +1,7 @@
 import { OrderStatus } from "@unaiztickets/common";
 import mongoose from "mongoose";
 import { TicketDocs } from "./ticket";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 
 //Interface describes the properties that are required to create Tickets
@@ -16,6 +17,7 @@ interface OrderDoc extends mongoose.Document{
     userId:string,
     status:OrderStatus,
     expiresAt:Date,
+    version:number,
     ticket:TicketDocs
 }
 
@@ -52,6 +54,9 @@ const orderSchema = new mongoose.Schema({
     }
 }
 )
+
+
+
 
 
 orderSchema.statics.build = (attrs:OrderAttrs)=>{

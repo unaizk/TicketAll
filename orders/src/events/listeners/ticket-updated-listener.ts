@@ -5,26 +5,38 @@ import { Ticket } from "../../models/ticket";
 
 
 
-export class TicketUpdatedListener extends Listener<TicketUpdatedEvent>{
-    subject : Subjects.TicketUpdated = Subjects.TicketUpdated;
+export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
+    subject: Subjects.TicketUpdated = Subjects.TicketUpdated;
+    queueGroupName = queueGroupName;
+  
+    async onMessage(data: TicketUpdatedEvent['data'], msg: Message) {
+        console.log(data, 'data');
+        console.log(data.id,data.title);
+        
+    
+        try {
+            const ticket = await Ticket.findOne({
+                _id: data.id,
+                version: data.version - 1,
+            });
 
-    queueGroupName = queueGroupName
-
-    async onMessage(data : TicketUpdatedEvent['data'], msg : Message){
-        const ticket = await Ticket.findById(data.id)
-
-        const { title, price} = data
-
-        if(!ticket){
-            throw new Error('Ticket not found')
+            console.log(ticket,'ticket');
+            
+    
+            if (!ticket) {
+                console.log('Ticket not found');
+            } else {
+                const { title, price } = data;
+                ticket.set({ title, price });
+                await ticket.save();
+            }
+            console.log(ticket, 'after saving ticket');
+            
+    
+            msg.ack();
+        } catch (error) {
+            console.error(error);
         }
-
-
-        ticket.set({
-            title,price
-        })
-
-        await ticket.save();
-        msg.ack()
     }
-}
+    
+  }
