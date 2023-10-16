@@ -22,7 +22,9 @@ export interface TicketDocs extends mongoose.Document{
 
 //Interface describes the properties that requires that a Ticket model has
 interface TicketModel extends mongoose.Model<TicketDocs>{
-    build(attrs:TicketAttrs):TicketDocs
+    build(attrs:TicketAttrs):TicketDocs;
+    findByEvent(event :{id:string,version:number}):Promise<TicketDocs | null>
+
 }
 
 
@@ -51,6 +53,12 @@ ticketSchema.set('versionKey','version') // This line sets the version key to 'v
 
 ticketSchema.plugin(updateIfCurrentPlugin) //This line adds the 'updateIfCurrentPlugin' to the schema. This plugin helps with optimistic concurrency control, ensuring that updates are applied only if the version number matches.
 
+ticketSchema.statics.findByEvent = (event:{id : string, version : number}) =>{
+    return Ticket.findOne({
+        _id : event.id,
+        version : event.version -1,
+    })
+}
 
 ticketSchema.statics.build = (attrs:TicketAttrs)=>{
     return new Ticket({
