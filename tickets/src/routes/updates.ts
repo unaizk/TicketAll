@@ -1,7 +1,7 @@
 import express, {Request, Response} from 'express'
 import { Ticket } from '../models/ticket'
 import { body } from 'express-validator'
-import { requireAuth , validateRequest, NotFoundError, NotAuthorizedError  } from '@unaiztickets/common'
+import { requireAuth , validateRequest, NotFoundError, NotAuthorizedError, BadRequestError  } from '@unaiztickets/common'
 import { TicketUpdatedPublisher } from '../events/publisher/ticket-updated-publisher'
 import { natsWrapper } from '../nats-wrapper'
 
@@ -29,6 +29,11 @@ validateRequest,
 
     if(tickets.userId !== req.currentUser!.id){
         throw new NotAuthorizedError()
+    }
+
+    //If there is orderId it means the ticket is reserved
+    if(tickets.orderId){
+        throw new BadRequestError("Cannot update reserved ticket")
     }
 
     tickets.set({
