@@ -10,24 +10,16 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     queueGroupName = queueGroupName;
   
     async onMessage(data: TicketUpdatedEvent['data'], msg: Message) {
-       
-        try {
-            const ticket = await Ticket.findByEvent(data); // this method is written in ticket.ts inside model folder
-
-         
-            if (!ticket) {
-                console.log('Ticket not found');
-            } else {
-                const { title, price } = data;
-                ticket.set({ title, price });
-                await ticket.save();
-            }
-            
-    
-            msg.ack();
-        } catch (error) {
-            console.error(error);
-        }
+      const ticket = await Ticket.findByEvent(data);
+  
+      if (!ticket) {
+        throw new Error('Ticket not found');
+      }
+  
+      const { title, price } = data;
+      ticket.set({ title, price });
+      await ticket.save();
+  
+      msg.ack();
     }
-    
   }
