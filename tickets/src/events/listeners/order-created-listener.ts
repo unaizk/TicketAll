@@ -2,6 +2,7 @@ import { Listener, OrderCreatedEvent, Subjects } from "@unaiztickets/common";
 import { queueGroupName } from "./queue-grouop-name";
 import { Message } from "node-nats-streaming";
 import { Ticket } from "../../models/ticket";
+import { TicketUpdatedPublisher } from "../publisher/ticket-updated-publisher";
 
 
 export class orderCreatedListener extends Listener<OrderCreatedEvent>{
@@ -20,6 +21,16 @@ export class orderCreatedListener extends Listener<OrderCreatedEvent>{
         ticket.set({orderId : data.id})
         //Save the ticket 
         await ticket.save()
+
+        //Publish the event when updated the ticket by adding orderId
+        await new TicketUpdatedPublisher(this.client).publish({
+            id: ticket.id,
+            title : ticket.title,
+            price : ticket.price,
+            userId : ticket.userId,
+            version : ticket.version,
+            orderId : ticket.orderId
+        })
         // Ack the message
         msg.ack()
     }

@@ -54,3 +54,16 @@ it('Acks the message',async()=>{
 
     expect(msg.ack).toHaveBeenCalled()
 })
+
+it('Publishes a ticket update event',async()=>{
+    const { ticket, msg, listener, data} = await setup()
+
+    await listener.onMessage(data,msg)
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled()
+
+    const ticketUpdatedData = JSON.parse((natsWrapper.client.publish as jest.Mock).mock.calls[0][1]) //In this line iam just parsing the data from the mock function of natsWrapper and folded inside a bracket to teel typescript its a mock function
+
+    expect(data.id).toEqual(ticketUpdatedData.orderId)
+    
+})
