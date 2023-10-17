@@ -1,3 +1,4 @@
+import { orderCreatedListeners } from "./events/listeners/order-created-listeners";
 import { natsWrapper } from "./nats-wrapper";
 
 
@@ -22,6 +23,8 @@ const start = async () => {
     // Event handlers for process termination signals (SIGINT and SIGTERM)
     process.on("SIGINT", () => natsWrapper.client.close()); // Close NATS connection on SIGINT
     process.on("SIGTERM", () => natsWrapper.client.close()); // Close NATS connection on SIGTERM
+
+    new orderCreatedListeners(natsWrapper.client).listen()
 
   } catch (error) {
     console.error(error);
