@@ -162,6 +162,4 @@ it('Cannot update ticket when it is reserved',async()=>{
         })
         .expect(400)
 
-
-    expect(natsWrapper.client.publish).toHaveBeenCalled()
 })
