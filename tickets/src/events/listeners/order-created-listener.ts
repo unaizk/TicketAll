@@ -11,6 +11,8 @@ export class orderCreatedListener extends Listener<OrderCreatedEvent>{
     queueGroupName: string = queueGroupName;
 
     async onMessage(data:OrderCreatedEvent['data'], msg: Message){
+        console.log('ticket');
+        
         // Find the ticket the order is reserving
         const ticket = await Ticket.findById(data.ticket.id)
         //If no ticket throw error

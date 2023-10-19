@@ -6,8 +6,9 @@ import jwt from 'jsonwebtoken'
 
 //To make the signin function available globally and accessible everywhere in the testing environment,
 declare global {
-    var signin:()=> string[];  // signin function return a string of array
-}
+    var signin: (id?: string) => string[];
+  }
+  
 
 jest.mock('../nats-wrapper')
 let mongo:any
