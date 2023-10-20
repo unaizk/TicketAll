@@ -41,11 +41,11 @@ afterAll(async()=>{
 })
 
 
-global.signin = ()=>{
+global.signin = (id?: string)=>{
    // Build a dummy JWT payload { id , email}
-   const id = new mongoose.Types.ObjectId().toHexString()// generating userId so in each call it will create new userId randomly
+
    const payload = {
-    id:id,
+    id:id || new mongoose.Types.ObjectId().toHexString(),// generating userId so in each call it will create new userId randomly
     email:'unaiz@gmail.com'
    }
 

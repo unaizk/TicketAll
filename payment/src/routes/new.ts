@@ -1,4 +1,4 @@
-import { BadRequestError, NotAuthorizedError, OrderStatus, requireAuth, validateRequest } from '@unaiztickets/common';
+import { BadRequestError, NotAuthorizedError, NotFoundError, OrderStatus, requireAuth, validateRequest } from '@unaiztickets/common';
 import express , {Request, Response} from 'express'
 import { body } from 'express-validator';
 import { Order } from '../model/order';
@@ -15,12 +15,12 @@ router.post('/api/payment', requireAuth, [
     .isEmpty()
 ],validateRequest, async(req : Request, res : Response)=>{
 
-    const {token , orderId} = req.body.id;
+    const {token , orderId} = req.body;
 
     const order = await Order.findById(orderId);
 
     if(!order){
-        throw new Error('Order not found')
+        throw new NotFoundError()
     }
 
     if(order.userId !== req.currentUser!.id){

@@ -3,13 +3,13 @@ import { queueGroupName } from "./queue-group-name";
 import { Message } from "node-nats-streaming";
 import { Order } from "../../model/order";
 
-export class OrderCreatedListenerPayment extends Listener<OrderCreatedEvent> {
+export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     subject: Subjects.OrderCreated = Subjects.OrderCreated;
     queueGroupName = queueGroupName;
   
     async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
       try {
-        console.log('Received Order Created Event', data);
+      
 
         const order = Order.build({
           id: data.id,

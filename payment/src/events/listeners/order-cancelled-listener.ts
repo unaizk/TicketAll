@@ -5,7 +5,7 @@ import { Order } from "../../model/order";
 
 
 
-export class OrderCancelledListenerPayment extends Listener<OrderCancelledEvent> {
+export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
     subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
     queueGroupName = queueGroupName;
   

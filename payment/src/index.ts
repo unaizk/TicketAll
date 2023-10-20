@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
-import {  OrderCancelledListenerPayment } from "./events/listeners/order-cancelled-listener";
-import {  OrderCreatedListenerPayment } from "./events/listeners/order-created-listener";
+import { OrderCancelledListener } from "./events/listeners/order-cancelled-listener";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
 
 
 const start = async () => {
@@ -45,10 +45,10 @@ const start = async () => {
   
       // Listening the Events when Order is created or cancelled
       console.log('Creating OrderCreatedListenerPayment');
-      new OrderCreatedListenerPayment(natsWrapper.client).listen();
+      new OrderCreatedListener(natsWrapper.client).listen();
       
       console.log('Creating OrderCancelledListenerPayment');
-      new OrderCancelledListenerPayment(natsWrapper.client).listen();
+      new OrderCancelledListener(natsWrapper.client).listen();
      
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
