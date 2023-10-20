@@ -31,15 +31,6 @@ const start = async () => {
     
     await natsWrapper.connect(process.env.NATS_CLUSTER, process.env.NATS_CLIENT, process.env.NATS_URL);
   
-    
-    
-
-      // Listening the Events when Order is created or cancelled
-      console.log('Creating OrderCreatedListenerPayment');
-      new OrderCreatedListenerPayment(natsWrapper.client).listen();
-      
-      console.log('Creating OrderCancelledListenerPayment');
-      new OrderCancelledListenerPayment(natsWrapper.client).listen();
 
     // Event handler for when the NATS connection is closed
     natsWrapper.client.on("close", () => {
@@ -51,12 +42,14 @@ const start = async () => {
     process.on("SIGINT", () => natsWrapper.client.close()); // Close NATS connection on SIGINT
     process.on("SIGTERM", () => natsWrapper.client.close()); // Close NATS connection on SIGTERM
      console.log('hiiiiiiiiiiiiiiiiii');
+  
+      // Listening the Events when Order is created or cancelled
+      console.log('Creating OrderCreatedListenerPayment');
+      new OrderCreatedListenerPayment(natsWrapper.client).listen();
+      
+      console.log('Creating OrderCancelledListenerPayment');
+      new OrderCancelledListenerPayment(natsWrapper.client).listen();
      
-   
-     
-     
-
-
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
   } catch (error) {
