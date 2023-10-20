@@ -5,7 +5,6 @@ import {  OrderCancelledListenerPayment } from "./events/listeners/order-cancell
 import {  OrderCreatedListenerPayment } from "./events/listeners/order-created-listener";
 
 
-
 const start = async () => {
   if (!process.env.JWT_KEY) {
     throw new Error("JWT_KEY is invalid");
@@ -23,7 +22,25 @@ const start = async () => {
     throw new Error("NATS_URL must be defined");
   }
   try {
+    console.log(process.env.NATS_CLUSTER,'process.env.NATS_CLUSTER');
+    console.log(process.env.NATS_CLIENT,'process.env.NATS_CLIENT');
+    console.log(process.env.NATS_URL,'process.env.NATS_URL');
+    console.log(process.env.MONGO_URI,'process.env.MONGO_URI');
+    
+    
+    
     await natsWrapper.connect(process.env.NATS_CLUSTER, process.env.NATS_CLIENT, process.env.NATS_URL);
+  
+    
+    
+
+      // Listening the Events when Order is created or cancelled
+      console.log('Creating OrderCreatedListenerPayment');
+      new OrderCreatedListenerPayment(natsWrapper.client).listen();
+      
+      console.log('Creating OrderCancelledListenerPayment');
+      new OrderCancelledListenerPayment(natsWrapper.client).listen();
+
     // Event handler for when the NATS connection is closed
     natsWrapper.client.on("close", () => {
       console.log("NATS connection closed!");
@@ -35,13 +52,8 @@ const start = async () => {
     process.on("SIGTERM", () => natsWrapper.client.close()); // Close NATS connection on SIGTERM
      console.log('hiiiiiiiiiiiiiiiiii');
      
-     // Listening the Events when Order is created or cancelled
-     new OrderCreatedListenerPayment(natsWrapper.client).listen();
-     console.log('midleeeeeee');
+   
      
-     new OrderCancelledListenerPayment(natsWrapper.client).listen();
-     
-     console.log('helooooooooooo');
      
 
 

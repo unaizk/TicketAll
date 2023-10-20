@@ -8,17 +8,21 @@ export class OrderCreatedListenerPayment extends Listener<OrderCreatedEvent> {
     queueGroupName = queueGroupName;
   
     async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
-      console.log('Received Order Created Event', data);
+      try {
+        console.log('Received Order Created Event', data);
 
-      const order = Order.build({
-        id: data.id,
-        price: data.ticket.price,
-        status: data.status,
-        userId: data.userId,
-        version: data.version,
-      });
-      await order.save();
-  
-      msg.ack();
+        const order = Order.build({
+          id: data.id,
+          price: data.ticket.price,
+          status: data.status,
+          userId: data.userId,
+          version: data.version,
+        });
+        await order.save();
+
+        msg.ack();
+      } catch (error) {
+        console.error('Error processing Order Created Event:', error);
+      }
     }
 }

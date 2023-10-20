@@ -24,6 +24,8 @@ const start = async () => {
   }
   try {
     await natsWrapper.connect(process.env.NATS_CLUSTER_ID, process.env.NATS_CLIENT_ID, process.env.NATS_URL);
+    console.log(new TicketUpdatedListener(natsWrapper.client).listen(),'listen');
+    
     // Event handler for when the NATS connection is closed
     natsWrapper.client.on("close", () => {
       console.log("NATS connection closed!");
