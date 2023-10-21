@@ -65,6 +65,3 @@ it('return 400 when purchasing an cancelled order ',async() =>{
     
 })
 
-it('return 404 when purchasing an order that does not exist',async() =>{
-
-})
