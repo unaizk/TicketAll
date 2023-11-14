@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { Order } from '../../model/order';
 import { OrderStatus } from '@unaiztickets/common';
 import { stripe } from '../../stripe';
+import { Payment } from '../../model/payment';
 
 
 it('return 404 when purchasing an order that does not exist',async() =>{
@@ -94,5 +95,12 @@ it('return 204 with a valid inputs',async()=>{
         })
 
         expect(stripeCharge).toBeDefined()
+
+        const payment = await Payment.findOne({
+            orderId : order.id,
+            stripeId : stripeCharge!.id
+        })
+
+        expect(payment).not.toBeNull()
 })
 
