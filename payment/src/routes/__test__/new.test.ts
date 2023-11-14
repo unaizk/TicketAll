@@ -6,8 +6,6 @@ import { OrderStatus } from '@unaiztickets/common';
 import { stripe } from '../../stripe';
 
 
-jest.mock('../../stripe')
-
 it('return 404 when purchasing an order that does not exist',async() =>{
 
     await request(app)
@@ -70,12 +68,13 @@ it('return 400 when purchasing an cancelled order ',async() =>{
 
 it('return 204 with a valid inputs',async()=>{
     const userId = new mongoose.Types.ObjectId().toHexString()
+    const price = Math.floor(Math.random() * 100000)
     const order = Order.build({
         id : new mongoose.Types.ObjectId().toHexString(),
         userId : userId,
         version : 0,
-        price : 500,
-        status : OrderStatus.Cancelled
+        price,
+        status : OrderStatus.Created
     })
 
     await order.save();
@@ -89,10 +88,11 @@ it('return 204 with a valid inputs',async()=>{
         })
         .expect(201)
 
-        const chargeOption = (stripe.charges.create as jest.Mock).mock.calls[0][0]
+        const stripeCharges = await stripe.charges.list({ limit : 50})
+        const stripeCharge = stripeCharges.data.find(charge =>{
+            return charge.amount === price*100
+        })
 
-        expect(chargeOption.source).toEqual('tok_visa')
-        expect(chargeOption.currency).toEqual('inr')
-        expect(chargeOption.price).toEqual(500*100)
+        expect(stripeCharge).toBeDefined()
 })
 
