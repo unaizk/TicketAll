@@ -88,7 +88,7 @@ it('return 204 with a valid inputs',async()=>{
         })
         .expect(201)
 
-        const stripeCharges = await stripe.charges.list({ limit : 50})
+        const stripeCharges = await stripe.charges.list({ limit : 50}) // we are tesing stripe in realistic test impllementation so there is a function list to list all the payments
         const stripeCharge = stripeCharges.data.find(charge =>{
             return charge.amount === price*100
         })

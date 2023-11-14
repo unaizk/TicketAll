@@ -13,7 +13,7 @@ declare global {
 jest.mock('../nats-wrapper')
 let mongo:any
 
-process.env.STRIP_KEY = 'sk_test_51O3ZzgSIhnRYEa3poLtS6QiFAt83Y5faxDfrLUIE1mOkZHc7LfuOltP6vIDYO0xKzQ9FlQ8tXQtOytHz763USUTT00Ks2O2rCs'
+process.env.STRIPE_KEY = 'sk_test_51O3ZzgSIhnRYEa3poLtS6QiFAt83Y5faxDfrLUIE1mOkZHc7LfuOltP6vIDYO0xKzQ9FlQ8tXQtOytHz763USUTT00Ks2O2rCs'  // exposing stripe secret key for tesing payment in realistic without mocking because stripe i set env in kubernetes cluster its not available in locally thats why i exposed here
 
 beforeAll(async()=>{
    
