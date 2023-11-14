@@ -8,21 +8,32 @@ import { createChargeRouter } from './routes/new';
 
 
 const app = express();
-app.set('trust proxy', true)
-app.use(cors());
+
+// Configuring express app to trust proxied requests from ingress-nginx.
+app.set("trust proxy", true);
+
 app.use(json());
-app.use(cookieSession({
-    signed : false,
-    secure : process.env.NODE_ENV !== 'test'
-}))
-app.use(currentUser)
-app.use(createChargeRouter)
+app.use(cors())
+app.use(
+  cookieSession({
+    signed: false, // To keep the data inside cookie un-encrypted.
+    secure: process.env.NODE_ENV !== "test" /* To keep it a https only cookie.
+    The value will be false in test environment to allow sending cookie over http also.*/,
+  })
+);
 
+// Check all the request for cookie and if cookie exist, attach a currentUser property (with auth details) to the request object.
+app.use(currentUser);
 
-app.all('*',async()=>{
-    throw new NotFoundError()
-})
+// Invoking routes
+app.use(createChargeRouter);
 
-app.use(errorHandler)
+// Resource Not Found Error Configuration
+app.all("*", () => {
+  throw new NotFoundError();
+});
 
-export { app }
+// Custom Error Handler Configuration
+app.use(errorHandler);
+
+export { app };

@@ -22,12 +22,6 @@ const start = async () => {
     throw new Error("NATS_URL must be defined");
   }
   try {
-    console.log(process.env.NATS_CLUSTER,'process.env.NATS_CLUSTER');
-    console.log(process.env.NATS_CLIENT,'process.env.NATS_CLIENT');
-    console.log(process.env.NATS_URL,'process.env.NATS_URL');
-    console.log(process.env.MONGO_URI,'process.env.MONGO_URI');
-    
-    
     
     await natsWrapper.connect(process.env.NATS_CLUSTER, process.env.NATS_CLIENT, process.env.NATS_URL);
   
@@ -41,13 +35,11 @@ const start = async () => {
     // Event handlers for process termination signals (SIGINT and SIGTERM)
     process.on("SIGINT", () => natsWrapper.client.close()); // Close NATS connection on SIGINT
     process.on("SIGTERM", () => natsWrapper.client.close()); // Close NATS connection on SIGTERM
-     console.log('hiiiiiiiiiiiiiiiiii');
-  
+
       // Listening the Events when Order is created or cancelled
-      console.log('Creating OrderCreatedListenerPayment');
+
       new OrderCreatedListener(natsWrapper.client).listen();
       
-      console.log('Creating OrderCancelledListenerPayment');
       new OrderCancelledListener(natsWrapper.client).listen();
      
     await mongoose.connect(process.env.MONGO_URI);

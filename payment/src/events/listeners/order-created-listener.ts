@@ -4,25 +4,25 @@ import { Message } from "node-nats-streaming";
 import { Order } from "../../model/order";
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
-    subject: Subjects.OrderCreated = Subjects.OrderCreated;
-    queueGroupName = queueGroupName;
-  
-    async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
-      try {
-      
+  readonly subject = Subjects.OrderCreated;
 
-        const order = Order.build({
-          id: data.id,
-          price: data.ticket.price,
-          status: data.status,
-          userId: data.userId,
-          version: data.version,
-        });
-        await order.save();
+  queueGroupName = queueGroupName;
 
-        msg.ack();
-      } catch (error) {
-        console.error('Error processing Order Created Event:', error);
-      }
-    }
+  async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
+    console.log('Hi im inside payment service...........................................................................');
+    
+    // Create and save the order to the DB from the Event Data received.
+    const order = Order.build({
+      id: data.id,
+      version: data.version,
+      status: data.status,
+      userId: data.userId,
+      price: data.ticket.price,
+    });
+
+    await order.save();
+
+    // Acknowledge the event
+    msg.ack();
+  }
 }
